@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 import * as ImageService from 'service/image-service';
 import { Button, SearchForm, Grid, GridItem, Text, CardItem } from 'components';
@@ -21,8 +23,11 @@ export class Gallery extends Component {
     if (prevState.search !== search || prevState.page !== page) {
       ImageService.getImages(search, page).then(data => {
         if (!data.photos.length) {
+          toast.error("Wow so easy!")
+          return
         }
         console.log(data);
+        toast.success(`Wow-wow find ${data.total_results} images!`)
         this.setState(prevState => ({
           gallary: [...prevState.gallary, ...data.photos],
           showBtn: page < Math.ceil(data.total_results / 15),
@@ -59,6 +64,7 @@ export class Gallery extends Component {
             Load more
           </Button>
         )}
+        <ToastContainer />
       </>
     );
   }
